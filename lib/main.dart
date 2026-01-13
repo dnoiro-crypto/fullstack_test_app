@@ -1,6 +1,19 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() => runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform as FirebaseOptions,
+    );
+  } catch (e) {
+    // Placeholder options may not be valid; attempt default initialization
+    await Firebase.initializeApp();
+  }
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
