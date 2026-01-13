@@ -1,0 +1,30 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [web, android]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Run tests
+        run: flutter test --no-color
+      - name: Build for matrix.target
+        run: |
+          if [ "${{ matrix.target }}" = "web" ]; then
+            flutter build web --release
+          else
+            flutter build apk --release
+          fi
